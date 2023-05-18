@@ -1,195 +1,179 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Table with Colored Boxes</title>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Beautiful and Responsive Design</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Table with Draggable Rectangular Boxes</title>
   <style>
     .box {
       width: 100px;
       height: 100px;
-      border: 1px solid #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
+      line-height: 100px;
       font-size: 20px;
       font-weight: bold;
-      transition: all 0.3s ease;
+      color: #ffffff;
+      border-radius: 5px;
+      margin: 5px;
     }
 
-    .box-100 { background-color: #f94144; color: #fff; }
-    .box-200 { background-color: #f3722c; color: #fff; }
-    .box-300 { background-color: #f8961e; color: #fff; }
-    .box-400 { background-color: #f9c74f; }
-    .box-500 { background-color: #90be6d; color: #fff; }
-    .box-600 { background-color: #4d908e; color: #fff; }
-    .box-700 { background-color: #577590; color: #fff; }
-    .box-800 { background-color: #277da1; color: #fff; }
-    .box-900 { background-color: #6c757d; color: #fff; }
-
-    .fade {
-      opacity: 0.5;
+    .box-100 {
+      background-color: #ff0000;
     }
 
-    .container {
-      margin-top: 50px;
+    .box-200 {
+      background-color: #00ff00;
     }
 
-  .table {
-      border-color: white !important;
-      border-collapse: collapse;
-      margin-bottom: 30px;
+    .box-300 {
+      background-color: #0000ff;
     }
 
-    .table td {
-      padding: 0;
-      border-color: white !important;
+    .box-400 {
+      background-color: #ffff00;
     }
-    
+
+    .box-500 {
+      background-color: #ff00ff;
+    }
+
+    .box-600 {
+      background-color: #00ffff;
+    }
+
+    .box-700 {
+      background-color: #ffa500;
+    }
+
+    .box-800 {
+      background-color: #008000;
+    }
+
+    .box-900 {
+      background-color: #800080;
+    }
+
+    .highlight {
+      border: 2px dashed #000000;
+    }
+
     .undo-button {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .undo-button .btn {
-      background-color: #277da1;
-      color: #fff;
-      border-radius: 0;
-      transition: background-color 0.3s ease;
-    }
-
-    .undo-button .btn:hover {
-      background-color: #f94144;
+      background-color: black;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
-</head>
-<body>
-  <div class="container">
-    <table class="table table-bordered">
-      <tr>
-        <td><div class="box box-100" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">100</div></td>
-        <td><div class="box box-200" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">200</div></td>
-        <td><div class="box box-300" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">300</div></td>
-      </tr>
-      <tr>
-        <td><div class="box box-400" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">400</div></td>
-        <td><div class="box box-500" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">500</div></td>
-        <td><div class="box box-600" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">600</div></td>
-      </tr>
-      <tr>
-        <td><div class="box box-700" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">700</div></td>
-        <td><div class="box box-800" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">800</div></td>
-        <td><div class="box box-900" draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)">900</div></td>
-      </tr>
-    </table>
-
-  <div class="container bg-white">
-  <div class="row">
-    <div class="col">
-      <table class="table">
-        <!-- Table content -->
-      </table>
-    </div>
-  </div>
-
-  <div class="row justify-content-start mt-3">
-    <div class="col-md-4 undo-button">
-      <button id="undoButton" class="btn btn-primary btn-block">Undo</button>
-    </div>
-  </div>
-</div>
-
   <script>
+    var lastAction = null;
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
     function drag(event) {
       event.dataTransfer.setData("text", event.target.id);
-    }
+      event.target.style.opacity = '0.5'; // Apply fade effect
+      event.dataTransfer.setDragImage(event.target, 50, 50); // Set the drag image to the center of the box
 
-    function allowDrop(event) {
-      event.preventDefault();
-    }
-
-    function drop(event) {
-      event.preventDefault();
-      var data = event.dataTransfer.getData("text");
-      event.target.appendChild(document.getElementById(data));
-    }
-  </script>
-</body>
-</html>
-
-
-
-  <script>
-    let draggedBoxValue, draggedBoxClass, undoTargetBoxValue, undoDraggedBoxValue, droppedBoxClass;
-
-    function drag(event) {
-      draggedBoxValue = event.target.textContent;
-      draggedBoxClass = event.target.className;
-      
-      undoDraggedBoxValue = draggedBoxValue
-      
-      // Apply fading effect
-      $(event.target).fadeTo(0, 0.5);
-
-      // Set the box position relative to the cursor
-      event.dataTransfer.setDragImage(event.target, 50, 50);
-    }
-
-    function allowDrop(event) {
-      event.preventDefault();
     }
 
     function drop(event) {
       event.preventDefault();
+      var sourceId = event.dataTransfer.getData("text");
+      var destinationId = event.target.id;
 
-      const targetBox = $(event.target);
-      const targetBoxValue = targetBox.text();
+      var sourceBox = document.getElementById(sourceId);
+      var destinationBox = document.getElementById(destinationId);
 
-      droppedBoxClass = event.target.className;
-      undoTargetBoxValue = targetBoxValue;
+      // Save the last action
+      lastAction = {
+        sourceBox: sourceBox,
+        sourceContent: sourceBox.innerHTML,
+        destinationBox: destinationBox,
+        destinationContent: destinationBox.innerHTML
+      };
 
-      const draggedBox = $(".box." + draggedBoxClass.split(' ')[1]);
-      const draggedBoxValue = draggedBox.text();
+      // Move the source box to the destination cell
+      // destinationBox.innerHTML = sourceBox.innerHTML;
+      sourceBox.innerHTML = destinationBox.innerHTML;
+      // Animate the box movement from destination to source
+      setTimeout(function () {
+        sourceBox.innerHTML = destinationBox.innerHTML;
+      }, 500);
 
-      // Swap the values of draggedBoxValue and targetBoxValue
-      draggedBox.text(targetBoxValue);
-      targetBox.text(draggedBoxValue);
-
-      // Reset the draggedBoxClass and draggedBoxValue variables
-      // draggedBoxClass = null;
-
-      draggedBox.fadeTo(0, 1);
-
-      // Animate the box movement back to the original cell
-      draggedBox.animate({
-        opacity: 0,
-        top: '0',
-        left: '0'
-      }, 1000, function() {
-        draggedBox.animate({
-          opacity: 1
-        }, 1000);
-      });
     }
 
     function undo() {
-      const draggedBox = $(".box." + draggedBoxClass.split(' ')[1]);
-      const droppedBox = $(".box." + droppedBoxClass.split(' ')[1]);
+      if (lastAction) {
+        var sourceBox = lastAction.sourceBox;
+        var destinationBox = lastAction.destinationBox;
 
-      draggedBox.text(undoDraggedBoxValue);
-      droppedBox.text(undoTargetBoxValue);
+        // Swap the HTML content of the cells
+        var temp = sourceBox.innerHTML;
+        sourceBox.innerHTML = lastAction.sourceContent;
+        destinationBox.innerHTML = lastAction.destinationContent;
+
+        // Reset the last action
+        lastAction = null;
+      }
     }
 
-    $("#undoButton").click(function() {
-      undo();
-    });
+  </script>
+</head>
+
+<body>
+  <center>
+    <table>
+      <tr>
+        <td>
+          <div class="box box-100" id="box-100" draggable="true" ondragstart="drag(event)">100</div>
+        </td>
+        <td>
+          <div class="box box-200" id="box-200" draggable="true" ondragstart="drag(event)">200</div>
+        </td>
+        <td>
+          <div class="box box-300" id="box-300" draggable="true" ondragstart="drag(event)">300</div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="box box-400" id="box-400" draggable="true" ondragstart="drag(event)">400</div>
+        </td>
+        <td>
+          <div class="box box-500" id="box-500" draggable="true" ondragstart="drag(event)">500</div>
+        </td>
+        <td>
+          <div class="box box-600" id="box-600" draggable="true" ondragstart="drag(event)">600</div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="box box-700" id="box-700" draggable="true" ondragstart="drag(event)">700</div>
+        </td>
+        <td>
+          <div class="box box-800" id="box-800" draggable="true" ondragstart="drag(event)">800</div>
+        </td>
+        <td>
+          <div class="box box-900" id="box-900" draggable="true" ondragstart="drag(event)">900</div>
+        </td>
+      </tr>
+    </table>
+    <button onclick="undo()" class="undo-button">Undo</button>
+  </center>
+
+
+  <script>
+    var cells = document.getElementsByClassName("box");
+
+    // Add event listeners to all cells
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].addEventListener("dragover", allowDrop);
+      cells[i].addEventListener("drop", drop);
+    }
   </script>
 </body>
+
 </html>
-
-
